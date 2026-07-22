@@ -19,7 +19,7 @@ class Header extends StatelessWidget {
                 borderRadius: BorderRadius.circular(18),
               ),
               child: const Icon(
-                Icons.language,
+                Icons.public,
                 size: 32,
                 color: Color(0xFF2997F5),
               ),
