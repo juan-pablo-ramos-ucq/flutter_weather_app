@@ -14,24 +14,12 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData(
         scaffoldBackgroundColor: const Color(0xFFFAFAFA),
-        textTheme: TextTheme(
-          titleLarge: GoogleFonts.nunito(
-            fontSize: 22,
-            fontWeight: FontWeight.w900,
-            letterSpacing: 0.3,
-          ),
-          bodyMedium: GoogleFonts.nunito(
-            fontSize: 13,
-            fontWeight: FontWeight.w600,
-            color: const Color.fromARGB(255, 98, 98, 98),
-          ),
-        ),
       ),
       debugShowCheckedModeBanner: false,
       home: const Scaffold(
         body: SafeArea(
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 45),
             child: Home(),
           ),
         ),
