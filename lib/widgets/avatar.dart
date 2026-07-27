@@ -55,6 +55,7 @@ class Avatar extends StatelessWidget {
                 imageUrl,
                 fit: BoxFit.cover,
                 errorBuilder: (_, _, _) {
+                  //this handling error case is when a URL exists, but downloading the image fails. For example, the URL could be expired, invalid, or the device could be offline.
                   return const Icon(
                     Icons.person,
                     color: Color(0xFF94A3B8),
