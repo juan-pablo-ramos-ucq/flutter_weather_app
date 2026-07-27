@@ -21,7 +21,7 @@ class GoogleLogin extends StatelessWidget {
 
       if (context.mounted) Navigator.pushReplacementNamed(context, '/home');
     } on GoogleSignInException catch (error) {
-      if (context.mounted && error.code != GoogleSignInExceptionCode.canceled) {
+      if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(error.description ?? 'No se pudo iniciar sesión'),
