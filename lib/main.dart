@@ -3,7 +3,7 @@ import 'widgets/home.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  WidgetsFlutterBinding.ensureInitialized(); // preparar y abrir la comunicacion entre el plugin de Google (e.g., el objeto GoogleSignIn)) y el Android nativo del celular fisico
 
   await GoogleSignIn.instance.initialize(
     serverClientId: "YOUR_WEB_CLIENT_ID.apps.googleusercontent.com"
