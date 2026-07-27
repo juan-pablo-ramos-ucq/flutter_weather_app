@@ -2,12 +2,33 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'logo.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../services/shared_preferences.dart';
 
 class GoogleLogin extends StatelessWidget {
-  const GoogleLogin({super.key});
+  GoogleLogin({super.key});
 
-  Future<void> _signIn() async {
-    await GoogleSignIn.instance.authenticate();
+  final PreferencesService _prefsService = PreferencesService();
+
+  Future<void> _signIn(BuildContext context) async {
+    try {
+      final user = await GoogleSignIn.instance.authenticate();
+      
+      await _prefsService.saveUser(
+        user.displayName ?? '',
+        user.photoUrl ?? '',
+        user.email,
+      );
+
+      if (context.mounted) Navigator.pushReplacementNamed(context, '/home');
+    } on GoogleSignInException catch (error) {
+      if (context.mounted && error.code != GoogleSignInExceptionCode.canceled) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(error.description ?? 'No se pudo iniciar sesión'),
+          ),
+        );
+      }
+    }
   }
 
   @override
@@ -15,25 +36,36 @@ class GoogleLogin extends StatelessWidget {
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 45),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 25),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Logo(),
-              const SizedBox(height: 8),
-              Text(
-                'Login',
-                textAlign: TextAlign.center,
-                style: GoogleFonts.nunito(
-                  fontSize: 21,
-                  fontWeight: FontWeight.w900,
+              const Logo(),
+              Expanded(
+                child: Center(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        'Login',
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.nunito(
+                          fontSize: 21,
+                          fontWeight: FontWeight.w900,
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      ElevatedButton(
+                        onPressed: () => _signIn(context),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFFEAF4FF),
+                          foregroundColor: const Color(0xFF172033),
+                        ),
+                        child: const Text('Continue with Google'),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              const SizedBox(height: 8),
-              OutlinedButton(
-                onPressed: _signIn,
-                child: const Text('Continuar con Google'),
               ),
             ],
           ),

@@ -1,11 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+import '../services/shared_preferences.dart';
 import 'profile_info_tile.dart';
 
-// context - the parent widget
-
-class ProfileSheet extends StatelessWidget {
+class ProfileSheet extends StatefulWidget {
   const ProfileSheet({super.key});
+
+  @override
+  State<ProfileSheet> createState() => _ProfileSheetState();
+}
+
+class _ProfileSheetState extends State<ProfileSheet> {
+  final PreferencesService _prefsService = PreferencesService();
+
+  late final Future<List<String?>> _userData;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _userData = Future.wait([
+      _prefsService.getName(),
+      _prefsService.getImgUrl(),
+      _prefsService.getEmail(),
+    ]);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,62 +54,103 @@ class ProfileSheet extends StatelessWidget {
                 style: IconButton.styleFrom(
                   backgroundColor: const Color(0xFFF1F5F9),
                 ),
-                icon: const Icon(Icons.close, color: Color(0xFF94A3B8)),
-              ),
-            ),
-
-            Container(
-              width: 108,
-              height: 108,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(color: const Color(0xFFE2E8F0), width: 3)
-              ),
-              child: ClipOval(
-                child: Image.network(
-                  'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d'
-                  '?w=300&h=300&fit=crop',
-                  fit: BoxFit.cover,
+                icon: const Icon(
+                  Icons.close,
+                  color: Color(0xFF94A3B8),
                 ),
               ),
             ),
 
-            const SizedBox(height: 20),
+            Expanded(
+              child: FutureBuilder<List<String?>>(
+                future: _userData,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
 
-            Text(
-              'Alex Rivera',
-              style: GoogleFonts.nunito(
-                fontSize: 17,
-                fontWeight: FontWeight.w800,
-                color: const Color(0xFF172033),
+                  if (snapshot.hasError) {
+                    return const Center(
+                      child: Text('No se pudo cargar el perfil'),
+                    );
+                  }
+
+                  final name = snapshot.data?[0] ?? '';
+                  final imageUrl = snapshot.data?[1] ?? '';
+                  final email = snapshot.data?[2] ?? '';
+
+                  return SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        Container(
+                          width: 108,
+                          height: 108,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: const Color(0xFFE2E8F0),
+                              width: 3,
+                            ),
+                          ),
+                          child: ClipOval(
+                            child: imageUrl.isNotEmpty
+                                ? Image.network(
+                                    imageUrl,
+                                    fit: BoxFit.cover,
+                                    errorBuilder: (_, _, _) =>
+                                        const Icon(Icons.person, size: 50),
+                                  )
+                                : const Icon(Icons.person, size: 50),
+                          ),
+                        ),
+
+                        const SizedBox(height: 20),
+
+                        Text(
+                          name,
+                          style: GoogleFonts.nunito(
+                            fontSize: 17,
+                            fontWeight: FontWeight.w800,
+                            color: const Color(0xFF172033),
+                          ),
+                        ),
+
+                        const SizedBox(height: 4),
+
+                        const Text(
+                          'WeatherScope Member',
+                          style: TextStyle(
+                            color: Color(0xFF94A3B8),
+                            fontSize: 15,
+                          ),
+                        ),
+
+                        const SizedBox(height: 30),
+
+                        ProfileInfoTile(
+                          icon: Icons.person_outline,
+                          label: 'FULL NAME',
+                          value: name,
+                          iconColor: const Color(0xFF8B5CF6),
+                          iconBackground: const Color(0xFFF1EAFE),
+                        ),
+
+                        const SizedBox(height: 14),
+
+                        ProfileInfoTile(
+                          icon: Icons.mail_outline,
+                          label: 'EMAIL',
+                          value: email,
+                          iconColor: const Color(0xFF4F8DF7),
+                          iconBackground: const Color(0xFFE5EFFF),
+                        ),
+                      ],
+                    ),
+                  );
+                },
               ),
-            ),
-
-            const SizedBox(height: 4),
-
-            const Text(
-              'WeatherScope Member',
-              style: TextStyle(color: Color(0xFF94A3B8), fontSize: 15),
-            ),
-
-            const SizedBox(height: 30),
-
-            const ProfileInfoTile(
-              icon: Icons.person_outline,
-              label: 'FULL NAME',
-              value: 'Alex Rivera',
-              iconColor: Color(0xFF8B5CF6),
-              iconBackground: Color(0xFFF1EAFE),
-            ),
-
-            const SizedBox(height: 14),
-
-            const ProfileInfoTile(
-              icon: Icons.mail_outline,
-              label: 'EMAIL',
-              value: 'alex.rivera@weatherscope.app',
-              iconColor: Color(0xFF4F8DF7),
-              iconBackground: Color(0xFFE5EFFF),
             ),
           ],
         ),

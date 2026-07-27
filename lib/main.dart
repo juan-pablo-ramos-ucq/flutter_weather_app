@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: const Color(0xFFFAFAFA),
       ),
       debugShowCheckedModeBanner: false,
-      home: Home(),
+      home: GoogleLogin(),
       initialRoute: '/',
       routes: {
         '/login': (context) => GoogleLogin()
