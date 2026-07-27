@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
 
+import '../services/shared_preferences.dart';
+
 class Avatar extends StatelessWidget {
-  const Avatar({super.key, this.onTap});
+  Avatar({
+    super.key,
+    this.onTap,
+  });
 
   final VoidCallback? onTap;
+
+  final PreferencesService _prefsService = PreferencesService();
 
   @override
   Widget build(BuildContext context) {
@@ -14,12 +21,47 @@ class Avatar extends StatelessWidget {
         height: 42,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          border: Border.all(color: Color(0xFFE2E8F0), width: 1.7),
+          border: Border.all(
+            color: const Color(0xFFE2E8F0),
+            width: 1.7,
+          ),
         ),
         child: ClipOval(
-          child: Image.network(
-            'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=300&fit=crop&auto=format',
-            fit: BoxFit.cover,
+          child: FutureBuilder<String>(
+            future: _prefsService.getImgUrl(),
+            builder: (context, snapshot) {
+              final imageUrl = snapshot.data ?? '';
+
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: SizedBox(
+                    width: 18,
+                    height: 18,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                    ),
+                  ),
+                );
+              }
+
+              if (imageUrl.isEmpty) {
+                return const Icon(
+                  Icons.person,
+                  color: Color(0xFF94A3B8),
+                );
+              }
+
+              return Image.network(
+                imageUrl,
+                fit: BoxFit.cover,
+                errorBuilder: (_, _, _) {
+                  return const Icon(
+                    Icons.person,
+                    color: Color(0xFF94A3B8),
+                  );
+                },
+              );
+            },
           ),
         ),
       ),
