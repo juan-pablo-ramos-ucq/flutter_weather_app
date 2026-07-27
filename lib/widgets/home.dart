@@ -8,18 +8,25 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Header(),
-        const Vacio(),
-        const SizedBox(height: 20),
-        // SearchBarWidget(
-        //   onCitySelected: (lat, lon, name) {
-        //     debugPrint("Ciudad seleccionada: $name -> Lat: $lat, Lon: $lon");
-        //   },
-        // ),
-      ],
+    return Scaffold(
+      body: SafeArea(
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 45),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Header(),
+              const Vacio(),
+              const SizedBox(height: 20),
+              // SearchBarWidget(
+              //   onCitySelected: (lat, lon, name) {
+              //     debugPrint("Ciudad seleccionada: $name -> Lat: $lat, Lon: $lon");
+              //   },
+              // ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

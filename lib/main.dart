@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'widgets/home.dart';
+import 'widgets/google_login.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'widgets/home.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized(); // preparar y abrir la comunicacion entre el plugin de Google (e.g., el objeto GoogleSignIn)) y el Android nativo del celular fisico
@@ -21,14 +22,11 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: const Color(0xFFFAFAFA),
       ),
       debugShowCheckedModeBanner: false,
-      home: const Scaffold(
-        body: SafeArea(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 45),
-            child: Home(),
-          ),
-        ),
-      ),
+      home: Home(),
+      initialRoute: '/',
+      routes: {
+        '/login': (context) => GoogleLogin()
+      }
     );
   }
 }
