@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:google_fonts/google_fonts.dart';
 
 class SearchBarWidget extends StatefulWidget {
   final Function(double lat, double lon, String name)? onCitySelected;
@@ -54,7 +55,7 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(30),
+            borderRadius: BorderRadius.circular(20),
             border: Border.all(color: Colors.grey.shade300),
             boxShadow: [
               BoxShadow(
@@ -66,26 +67,35 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
           ),
           child: TextField(
             controller: _controller,
+            cursorColor: const Color(0xFF000000),
             onChanged: _searchCities,
             decoration: InputDecoration(
-              icon: const Icon(Icons.search, color: Colors.grey),
-              hintText: "Search city or region...",
-              hintStyle: const TextStyle(color: Colors.grey),
-              border: InputBorder.none,
-              suffixIcon: _isLoading
-                  ? Transform.scale(
+              icon: !_isLoading
+                  ? const Icon(Icons.search, color: Colors.grey)
+                  : Transform.scale(
                       scale: 0.5,
-                      child: CircularProgressIndicator(strokeWidth: 2),
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        color: Color.fromARGB(255, 148, 163, 184),
+                      ),
+                    ),
+              hintText: "Search city or region...",
+              hintStyle: GoogleFonts.nunito(
+                fontWeight: FontWeight.w600,
+                color: const Color.fromARGB(255, 148, 163, 184),
+                fontSize: 12,
+                height: 1.65,
+              ),
+              border: InputBorder.none,
+              suffixIcon: _controller.text.isNotEmpty
+                  ? IconButton(
+                      icon: const Icon(Icons.clear, size: 20),
+                      onPressed: () {
+                        _controller.clear();
+                        _searchCities('');
+                      },
                     )
-                  : _controller.text.isNotEmpty
-                      ? IconButton(
-                          icon: const Icon(Icons.clear, size: 20),
-                          onPressed: () {
-                            _controller.clear();
-                            _searchCities('');
-                          },
-                        )
-                      : null,
+                  : null,
             ),
           ),
         ),
@@ -94,7 +104,7 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
             margin: const EdgeInsets.only(top: 8),
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(14),
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withOpacity(0.1),

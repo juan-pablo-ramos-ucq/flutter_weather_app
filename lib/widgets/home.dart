@@ -11,14 +11,16 @@ class Home extends StatelessWidget {
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 45),
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 25),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Header(),
-              const Vacio(),
               const SizedBox(height: 20),
               SearchBarWidget(),
+              const Expanded(
+                child: Vacio()
+              )
             ],
           ),
         ),

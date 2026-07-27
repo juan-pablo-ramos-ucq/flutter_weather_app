@@ -8,6 +8,7 @@ class Vacio extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           const Text('🌍', style: TextStyle(fontSize: 55)),
           const SizedBox(height: 8),
