@@ -7,7 +7,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized(); // preparar y abrir la comunicacion entre el plugin de Google (e.g., el objeto GoogleSignIn)) y el Android nativo del celular fisico
 
   await GoogleSignIn.instance.initialize(
-    serverClientId: "632004573110-kj2dt3b1nbvsbp142lodei469sjhtk28.apps.googleusercontent.com"
+    serverClientId: "632004573110-0gka00p291ufmaam59ru644srrf43vtv.apps.googleusercontent.com"
   );
   runApp(const MyApp());
 }
