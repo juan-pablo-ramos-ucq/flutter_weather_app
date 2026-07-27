@@ -4,9 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:google_fonts/google_fonts.dart';
 
 class SearchBarWidget extends StatefulWidget {
-  final Function(double lat, double lon, String name)? onCitySelected;
-
-  const SearchBarWidget({super.key, this.onCitySelected});
+  const SearchBarWidget({super.key});
 
   @override
   State<SearchBarWidget> createState() => _SearchBarWidgetState();
@@ -49,7 +47,7 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Stack(
       children: [
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
@@ -59,7 +57,7 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
             border: Border.all(color: Colors.grey.shade300),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.05),
+                color: Colors.black.withValues(alpha: 0.05),
                 blurRadius: 10,
                 offset: const Offset(0, 4),
               ),
@@ -67,7 +65,7 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
           ),
           child: TextField(
             controller: _controller,
-            cursorColor: const Color(0xFF000000),
+            cursorColor: Colors.black,
             onChanged: _searchCities,
             decoration: InputDecoration(
               icon: !_isLoading
@@ -76,13 +74,13 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
                       scale: 0.5,
                       child: CircularProgressIndicator(
                         strokeWidth: 2,
-                        color: Color.fromARGB(255, 148, 163, 184),
+                        color: Color(0xFF94A3B8),
                       ),
                     ),
-              hintText: "Search city or region...",
+              hintText: 'Search city or region...',
               hintStyle: GoogleFonts.nunito(
                 fontWeight: FontWeight.w600,
-                color: const Color.fromARGB(255, 148, 163, 184),
+                color: const Color(0xFF94A3B8),
                 fontSize: 12,
                 height: 1.65,
               ),
@@ -99,47 +97,48 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
             ),
           ),
         ),
-        if (_searchResults.isNotEmpty)
-          Container(
-            margin: const EdgeInsets.only(top: 8),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(14),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
-                  blurRadius: 10,
-                  offset: const Offset(0, 4),
-                ),
-              ],
-            ),
-            child: ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: _searchResults.length,
-              itemBuilder: (context, index) {
-                final city = _searchResults[index];
-                final name = city['name'] ?? '';
-                final country = city['country'] ?? '';
-                final admin1 = city['admin1'] ?? '';
-                final lat = city['latitude'];
-                final lon = city['longitude'];
 
-                return ListTile(
-                  title: Text('$name, $country'),
-                  subtitle: admin1.isNotEmpty ? Text(admin1) : null,
-                  leading: const Icon(Icons.location_on_outlined),
-                  onTap: () {
-                    if (widget.onCitySelected != null) {
-                      widget.onCitySelected!(lat, lon, name);
-                    }
-                    setState(() {
-                      _controller.text = name;
-                      _searchResults = [];
-                    });
-                  },
-                );
-              },
+        if (_searchResults.isNotEmpty)
+          Positioned(
+            top: 64,
+            left: 0,
+            right: 0,
+            child: Container(
+              constraints: const BoxConstraints(maxHeight: 420),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(14),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.10),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: ListView.builder(
+                shrinkWrap: true,
+                padding: EdgeInsets.zero,
+                itemCount: _searchResults.length,
+                itemBuilder: (context, index) {
+                  final city = _searchResults[index];
+                  final name = city['name'] ?? '';
+                  final country = city['country'] ?? '';
+                  final admin1 = city['admin1'] ?? '';
+
+                  return ListTile(
+                    title: Text('$name, $country'),
+                    subtitle: admin1.isNotEmpty ? Text(admin1) : null,
+                    leading: const Icon(Icons.location_on_outlined),
+                    onTap: () {
+                      setState(() {
+                        _controller.text = name;
+                        _searchResults = [];
+                      });
+                    },
+                  );
+                },
+              ),
             ),
           ),
       ],
