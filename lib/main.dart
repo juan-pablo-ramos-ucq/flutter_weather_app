@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 import 'widgets/home.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await GoogleSignIn.instance.initialize(
+    serverClientId: "YOUR_WEB_CLIENT_ID.apps.googleusercontent.com"
+  );
   runApp(const MyApp());
 }
 
