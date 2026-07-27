@@ -1,31 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
-import '../services/shared_preferences.dart';
 import 'profile_info_tile.dart';
 
-class ProfileSheet extends StatefulWidget {
-  const ProfileSheet({super.key});
+class ProfileSheet extends StatelessWidget {
+  const ProfileSheet({super.key, required this.userData});
 
-  @override
-  State<ProfileSheet> createState() => _ProfileSheetState();
-}
-
-class _ProfileSheetState extends State<ProfileSheet> {
-  final PreferencesService _prefsService = PreferencesService();
-
-  late final Future<List<String?>> _userData;
-
-  @override
-  void initState() {
-    super.initState();
-
-    _userData = Future.wait([
-      _prefsService.getName(),
-      _prefsService.getImgUrl(),
-      _prefsService.getEmail(),
-    ]);
-  }
+  final Future<List<String?>> userData;
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +43,7 @@ class _ProfileSheetState extends State<ProfileSheet> {
 
             Expanded(
               child: FutureBuilder<List<String?>>(
-                future: _userData,
+                future: userData,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(

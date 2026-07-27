@@ -73,7 +73,7 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
               hintStyle: const TextStyle(color: Colors.grey),
               border: InputBorder.none,
               suffixIcon: _isLoading
-                  ? const Transform.scale(
+                  ? Transform.scale(
                       scale: 0.5,
                       child: CircularProgressIndicator(strokeWidth: 2),
                     )

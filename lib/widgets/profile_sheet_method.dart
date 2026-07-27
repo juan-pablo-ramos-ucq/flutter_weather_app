@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'profile_sheet.dart';
+import 'profile_sheet_container.dart';
 
 void showProfileSheet(BuildContext context) {
   showModalBottomSheet<void>(
@@ -11,6 +11,6 @@ void showProfileSheet(BuildContext context) {
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
     ),
-    builder: (_) => ProfileSheet()
+    builder: (_) => ProfileSheetContainer()
   );
 }
