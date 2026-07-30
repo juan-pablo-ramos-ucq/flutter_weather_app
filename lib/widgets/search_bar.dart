@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:google_fonts/google_fonts.dart';
+import '../models/weather_location.dart';
 
 class SearchBarWidget extends StatefulWidget {
   const SearchBarWidget({super.key});
@@ -131,10 +132,21 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
                     subtitle: admin1.isNotEmpty ? Text(admin1) : null,
                     leading: const Icon(Icons.location_on_outlined),
                     onTap: () {
+                      final location = WeatherLocation(
+                        latitude: (city['latitude'] as num).toDouble(),
+                        longitude: (city['longitude'] as num).toDouble(),
+                      );
+
                       setState(() {
                         _controller.text = name;
                         _searchResults = [];
                       });
+
+                      Navigator.pushNamed(
+                        context,
+                        '/weather',
+                        arguments: location,
+                      );
                     },
                   );
                 },

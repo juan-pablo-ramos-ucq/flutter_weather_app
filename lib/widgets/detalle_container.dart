@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-
 import '../models/weather_card_data.dart';
+import '../models/weather_location.dart';
 import 'detalle.dart';
 
 class DetalleContainer extends StatefulWidget {
-  const DetalleContainer({super.key});
+  const DetalleContainer({required this.location, super.key});
+  
+  final WeatherLocation location;
 
   @override
   State<DetalleContainer> createState() => _DetalleContainerState();
@@ -24,7 +26,7 @@ class _DetalleContainerState extends State<DetalleContainer> {
 
   Future<void> _loadWeatherData() async {
     try {
-      final cards = await fetchWeatherData();
+      final cards = await fetchWeatherData(widget.location);
 
       if (!mounted) return;
 
