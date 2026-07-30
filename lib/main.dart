@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'widgets/google_login.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'widgets/home.dart';
+import 'widgets/mostrar_clima.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized(); // preparar y abrir la comunicacion entre el plugin de Google (e.g., el objeto GoogleSignIn)) y el Android nativo del celular fisico
@@ -25,7 +26,8 @@ class MyApp extends StatelessWidget {
       home: GoogleLogin(),
       initialRoute: '/',
       routes: {
-        '/home': (context) => Home()
+        '/home': (context) => Home(),
+        '/weather': (context) => MostrarClima()
       }
     );
   }
