@@ -13,11 +13,11 @@ class Detalle extends StatelessWidget {
       itemCount: data.length,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
-        crossAxisSpacing: 10.0,
-        mainAxisSpacing: 10.0,
-        childAspectRatio: 1.0,
+        crossAxisSpacing: 12,
+        mainAxisSpacing: 12,
+        mainAxisExtent: 132,
       ),
-      itemBuilder: (BuildContext context, int index){
+      itemBuilder: (BuildContext context, int index) {
         final WeatherCardData currentCard = data[index];
 
         return WeatherCard(currentCard: currentCard);
