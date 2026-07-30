@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData(scaffoldBackgroundColor: const Color(0xFFFAFAFA)),
       debugShowCheckedModeBanner: false,
-      home: GoogleLogin(),
+      home: Home(),
       initialRoute: '/',
       routes: {
         '/home': (context) => Home()

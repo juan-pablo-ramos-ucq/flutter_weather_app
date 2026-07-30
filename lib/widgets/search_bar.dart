@@ -111,6 +111,11 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
                       onPressed: () {
                         _controller.clear();
                         _searchCities('');
+
+                        if (widget.replaceCurrentRoute) {
+                          Navigator.pop(context);
+                          FocusScope.of(context).unfocus();
+                        }
                       },
                     )
                   : null,
@@ -162,7 +167,7 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
                       );
 
                       setState(() {
-                        _controller.text = name;
+                        _controller.clear();
                         _searchResults = [];
                       });
 
