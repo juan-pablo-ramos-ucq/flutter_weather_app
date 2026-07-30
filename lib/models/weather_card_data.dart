@@ -27,16 +27,7 @@ class WeatherCardData {
 
 Future<List<WeatherCardData>> fetchWeatherData() async {
   final uri = Uri.parse(
-    'https://api.open-meteo.com/v1/forecast'
-    '?latitude=20.6216'
-    '&longitude=-100.422738'
-    '&hourly=temperature_2m,weather_code'
-    '&current=temperature_2m,apparent_temperature,is_day,rain,'
-    'weather_code,cloud_cover,pressure_msl,wind_speed_10m,'
-    'wind_direction_10m,wind_gusts_10m,precipitation,'
-    'relative_humidity_2m,uv_index'
-    '&timezone=auto'
-    '&forecast_days=1',
+    'https://api.open-meteo.com/v1/forecast?latitude=20.6216&longitude=-100.422738&hourly=temperature_2m,weather_code&current=temperature_2m,apparent_temperature,is_day,rain,weather_code,cloud_cover,pressure_msl,wind_speed_10m,wind_direction_10m,wind_gusts_10m,precipitation,relative_humidity_2m,uv_index&timezone=auto&forecast_days=1',
   );
 
   final response = await http.get(uri);

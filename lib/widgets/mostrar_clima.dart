@@ -9,15 +9,10 @@ class MostrarClima extends StatelessWidget {
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 20,
-            vertical: 25,
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 25),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const DetalleContainer()
-            ],
+            children: [const Expanded(child: DetalleContainer())],
           ),
         ),
       ),
