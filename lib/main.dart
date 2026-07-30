@@ -25,9 +25,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: Home(),
       initialRoute: '/',
-      routes: {
-        '/home': (context) => Home()
-      },
+      routes: {'/home': (context) => Home()},
       onGenerateRoute: (settings) {
         if (settings.name == '/weather') {
           final location = settings.arguments as WeatherLocation;

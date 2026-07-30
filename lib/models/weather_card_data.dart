@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import '../models/weather_location.dart';
+import 'hourly_forecast_data.dart';
 
 class WeatherCardData {
   const WeatherCardData({
@@ -25,9 +26,16 @@ class WeatherCardData {
   final Color? captionColor;
 }
 
-Future<List<WeatherCardData>> fetchWeatherData(WeatherLocation location) async {
+class WeatherData {
+  const WeatherData({required this.currentCards, required this.hourlyForecast});
+
+  final List<WeatherCardData> currentCards;
+  final List<HourlyForecastData> hourlyForecast;
+}
+
+Future<WeatherData> fetchWeatherData(WeatherLocation location) async {
   final uri = Uri.parse(
-    'https://api.open-meteo.com/v1/forecast?latitude=${location.latitude}&longitude=${location.longitude}&hourly=temperature_2m,weather_code&current=temperature_2m,apparent_temperature,is_day,rain,weather_code,cloud_cover,pressure_msl,wind_speed_10m,wind_direction_10m,wind_gusts_10m,precipitation,relative_humidity_2m,uv_index&timezone=auto&forecast_days=1',
+    'https://api.open-meteo.com/v1/forecast?latitude=${location.latitude}&longitude=${location.longitude}&hourly=temperature_2m,weather_code,is_day&current=temperature_2m,apparent_temperature,is_day,rain,weather_code,cloud_cover,pressure_msl,wind_speed_10m,wind_direction_10m,wind_gusts_10m,precipitation,relative_humidity_2m,uv_index&timezone=auto&forecast_days=1',
   );
 
   final response = await http.get(uri);
@@ -39,8 +47,25 @@ Future<List<WeatherCardData>> fetchWeatherData(WeatherLocation location) async {
   final responseData = jsonDecode(response.body);
   final current = responseData['current'];
   final currentUnits = responseData['current_units'];
+  final hourly = responseData['hourly'];
 
-  return [
+  final times = hourly['time'] as List<dynamic>;
+  final temperatures = hourly['temperature_2m'] as List<dynamic>;
+  final weatherCodes = hourly['weather_code'] as List<dynamic>;
+  final dayValues = hourly['is_day'] as List<dynamic>;
+
+  final hourlyForecast = List<HourlyForecastData>.generate(times.length, (
+    index,
+  ) {
+    return HourlyForecastData(
+      time: DateTime.parse(times[index] as String),
+      temperature: (temperatures[index] as num).toDouble(),
+      weatherCode: (weatherCodes[index] as num).toInt(),
+      isDay: (dayValues[index] as num).toInt() == 1,
+    );
+  });
+
+  final currentCards = <WeatherCardData>[
     WeatherCardData(
       title: 'Humidity',
       metric:
@@ -121,6 +146,10 @@ Future<List<WeatherCardData>> fetchWeatherData(WeatherLocation location) async {
       cardBorderColor: const Color(0xFF3A5A83),
     ),
   ];
+  return WeatherData(
+    currentCards: currentCards,
+    hourlyForecast: hourlyForecast,
+  );
 }
 
 String _formatNumber(dynamic value) {
@@ -134,7 +163,9 @@ String _formatNumber(dynamic value) {
     return value.toInt().toString();
   }
 
-  return value.toStringAsFixed(1); // truncate the real number to one decimal place
+  return value.toStringAsFixed(
+    1,
+  ); // truncate the real number to one decimal place
 }
 
 String _windDirectionToCompass(double degrees) {
