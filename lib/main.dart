@@ -23,11 +23,12 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: const Color(0xFFFAFAFA),
       ),
       debugShowCheckedModeBanner: false,
-      home: GoogleLogin(),
+      //home: GoogleLogin(),
+      home: MostrarClima(),
       initialRoute: '/',
       routes: {
         '/home': (context) => Home(),
-        '/weather': (context) => MostrarClima()
+        //'/weather': (context) => MostrarClima()
       }
     );
   }
