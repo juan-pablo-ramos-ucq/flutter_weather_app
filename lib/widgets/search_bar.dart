@@ -5,7 +5,12 @@ import 'package:google_fonts/google_fonts.dart';
 import '../models/weather_location.dart';
 
 class SearchBarWidget extends StatefulWidget {
-  const SearchBarWidget({super.key});
+  const SearchBarWidget({
+    this.replaceCurrentRoute = false,
+    super.key,
+  });
+
+  final bool replaceCurrentRoute;
 
   @override
   State<SearchBarWidget> createState() => _SearchBarWidgetState();
@@ -142,11 +147,19 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
                         _searchResults = [];
                       });
 
-                      Navigator.pushNamed(
-                        context,
-                        '/weather',
-                        arguments: location,
-                      );
+                      if (widget.replaceCurrentRoute) {
+                        Navigator.pushReplacementNamed(
+                          context,
+                          '/weather',
+                          arguments: location,
+                        );
+                      } else {
+                        Navigator.pushNamed(
+                          context,
+                          '/weather',
+                          arguments: location,
+                        );
+                      }
                     },
                   );
                 },

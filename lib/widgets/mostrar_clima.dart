@@ -20,9 +20,21 @@ class MostrarClima extends StatelessWidget {
             children: [
               const Header(),
               const SizedBox(height: 23),
-              SearchBarWidget(),
-              const SizedBox(height: 23),
-              Expanded(child: DetalleContainer(location: location)),
+              Expanded(
+                child: Stack(
+                  children: [
+                    Positioned.fill(
+                      top: 79,
+                      child: DetalleContainer(location: location),
+                    ),
+                    const Positioned.fill(
+                      child: SearchBarWidget(
+                        replaceCurrentRoute: true,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
         ),
