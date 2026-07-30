@@ -6,10 +6,12 @@ import '../models/weather_location.dart';
 
 class SearchBarWidget extends StatefulWidget {
   const SearchBarWidget({
+    this.initialText = '',
     this.replaceCurrentRoute = false,
     super.key,
   });
 
+  final String initialText;
   final bool replaceCurrentRoute;
 
   @override
@@ -17,7 +19,7 @@ class SearchBarWidget extends StatefulWidget {
 }
 
 class _SearchBarWidgetState extends State<SearchBarWidget> {
-  final TextEditingController _controller = TextEditingController();
+  late final TextEditingController _controller;
   List<dynamic> _searchResults = [];
   bool _isLoading = false;
 
@@ -49,6 +51,18 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
     } finally {
       setState(() => _isLoading = false);
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController(text: widget.initialText);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -138,6 +152,11 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
                     leading: const Icon(Icons.location_on_outlined),
                     onTap: () {
                       final location = WeatherLocation(
+                        label: [
+                          name,
+                          if (admin1.isNotEmpty) admin1,
+                          country,
+                        ].join(', '),
                         latitude: (city['latitude'] as num).toDouble(),
                         longitude: (city['longitude'] as num).toDouble(),
                       );

@@ -27,8 +27,9 @@ class MostrarClima extends StatelessWidget {
                       top: 79,
                       child: DetalleContainer(location: location),
                     ),
-                    const Positioned.fill(
+                    Positioned.fill(
                       child: SearchBarWidget(
+                        initialText: location.label,
                         replaceCurrentRoute: true,
                       ),
                     ),

@@ -15,7 +15,7 @@ class Detalle extends StatelessWidget {
         crossAxisCount: 2,
         crossAxisSpacing: 12,
         mainAxisSpacing: 12,
-        mainAxisExtent: 132,
+        mainAxisExtent: 144,
       ),
       itemBuilder: (BuildContext context, int index) {
         final WeatherCardData currentCard = data[index];
