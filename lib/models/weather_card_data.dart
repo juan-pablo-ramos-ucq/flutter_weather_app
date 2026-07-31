@@ -26,6 +26,7 @@ class WeatherCardData {
   final Color? captionColor;
 }
 
+// a class that combines detalle data with forecast details
 class WeatherData {
   const WeatherData({required this.currentCards, required this.hourlyForecast});
 
@@ -45,26 +46,31 @@ Future<WeatherData> fetchWeatherData(WeatherLocation location) async {
   }
 
   final responseData = jsonDecode(response.body);
+  
+  // current day data with units
   final current = responseData['current'];
   final currentUnits = responseData['current_units'];
+
+  // Hourly forecast data for the current day
   final hourly = responseData['hourly'];
+  final times = hourly['time']; // Array containing the date and time for each hour
+  final temperatures = hourly['temperature_2m']; // Array containing the temperature for each hour
+  final weatherCodes = hourly['weather_code']; // Array containing the weather code for each hour
+  final dayValues = hourly['is_day']; // Array indicating whether each hour occurs during the day or at night
 
-  final times = hourly['time'] as List<dynamic>;
-  final temperatures = hourly['temperature_2m'] as List<dynamic>;
-  final weatherCodes = hourly['weather_code'] as List<dynamic>;
-  final dayValues = hourly['is_day'] as List<dynamic>;
-
+  // creating list of forecast data objects
   final hourlyForecast = List<HourlyForecastData>.generate(times.length, (
     index,
   ) {
     return HourlyForecastData(
-      time: DateTime.parse(times[index] as String),
-      temperature: (temperatures[index] as num).toDouble(),
-      weatherCode: (weatherCodes[index] as num).toInt(),
-      isDay: (dayValues[index] as num).toInt() == 1,
+      time: DateTime.parse(times[index]),
+      temperature: temperatures[index],
+      weatherCode: weatherCodes[index],
+      isDay: dayValues[index],
     );
   });
 
+  // creating list of current/detalle data objects
   final currentCards = <WeatherCardData>[
     WeatherCardData(
       title: 'Humidity',
@@ -152,6 +158,7 @@ Future<WeatherData> fetchWeatherData(WeatherLocation location) async {
   );
 }
 
+// helper functions for current/detalle data objects
 String _formatNumber(dynamic value) {
   if (value is! num) {
     //to evade numeric conversion errors
@@ -163,9 +170,7 @@ String _formatNumber(dynamic value) {
     return value.toInt().toString();
   }
 
-  return value.toStringAsFixed(
-    1,
-  ); // truncate the real number to one decimal place
+  return value.toStringAsFixed(1); // truncate the real number to one decimal place
 }
 
 String _windDirectionToCompass(double degrees) {
