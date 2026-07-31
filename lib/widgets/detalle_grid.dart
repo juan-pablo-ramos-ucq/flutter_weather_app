@@ -10,6 +10,8 @@ class DetalleGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
+      shrinkWrap: true, // Makes the GridView take only the height required by all its items.
+      physics: const NeverScrollableScrollPhysics(), // makes the GridView's inner content to not be scrollable
       itemCount: data.length,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,

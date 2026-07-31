@@ -20,39 +20,21 @@ class MostrarClima extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Padding(
+        child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 25),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Header(),
               const SizedBox(height: 23),
-              Expanded(
-                child: Stack(
-                  children: [
-                    Positioned.fill(
-                      top: 79,
-                      bottom: 109,
-                      child: DetalleGrid(data: weatherData.currentCards),
-                    ),
-                    Positioned.fill(
-                      child: SearchBarWidget(
-                        initialText: location.label,
-                        replaceCurrentRoute: true,
-                      ),
-                    ),
-                    Positioned(
-                      // it is basically Positioned.fill with top equal to auto
-                      left: 0,
-                      right: 0,
-                      bottom: 0,
-                      child: HourlyForecastCarousel(
-                        forecasts: weatherData.hourlyForecast,
-                      ),
-                    ),
-                  ],
-                ),
+              SearchBarWidget(
+                initialText: location.label,
+                replaceCurrentRoute: true,
               ),
+              const SizedBox(height: 38),
+              DetalleGrid(data: weatherData.currentCards),
+              const SizedBox(height: 24),
+              HourlyForecastCarousel(forecasts: weatherData.hourlyForecast),
             ],
           ),
         ),
