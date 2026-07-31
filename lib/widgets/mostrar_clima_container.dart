@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../models/weather_data.dart';
 import '../models/weather_location.dart';
 import 'mostrar_clima.dart';
+import 'header.dart';
 
 class MostrarClimaContainer extends StatefulWidget {
   const MostrarClimaContainer({required this.location, super.key});
@@ -47,14 +48,29 @@ class _MostrarClimaContainerState extends State<MostrarClimaContainer> {
   @override
   Widget build(BuildContext context) {
     if (isLoading) {
-      return const Center(child: CircularProgressIndicator());
+      return const Scaffold(
+        body: SafeArea(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 25),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Header(),
+                Expanded(child: Center(child: CircularProgressIndicator())),
+              ],
+            ),
+          ),
+        ),
+      );
     }
 
     if (errorMessage != null) {
-      return Center(
-        child: Text(
-          'Could not load weather data.\n$errorMessage',
-          textAlign: TextAlign.center,
+      return Scaffold(
+        body: Center(
+          child: Text(
+            'Could not load weather data.\n$errorMessage',
+            textAlign: TextAlign.center,
+          ),
         ),
       );
     }
