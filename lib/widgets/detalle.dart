@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../models/weather_card_data.dart';
+import '../models/weather_data.dart';
 import 'weather_card.dart';
 
 class Detalle extends StatelessWidget {

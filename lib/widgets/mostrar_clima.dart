@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'detalle_container.dart';
 import 'header.dart';
-import '../models/weather_location.dart';
+import '../models/weather_data.dart';
 import 'search_bar.dart';
+import 'hourly_forecast_carousel.dart';
+import '../models/weather_location.dart';
 
 class MostrarClima extends StatelessWidget {
-  const MostrarClima({required this.location, super.key});
+  const MostrarClima({required this.weatherData, required this.location, super.key});
 
+  final WeatherData weatherData;
   final WeatherLocation location;
 
   @override

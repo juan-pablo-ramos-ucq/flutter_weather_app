@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import '../models/weather_data.dart';
 import '../models/weather_location.dart';
-import 'detalle.dart';
+import 'mostrar_clima.dart';
 
-class DetalleContainer extends StatefulWidget {
-  const DetalleContainer({required this.location, super.key});
+class MostrarClimaContainer extends StatefulWidget {
+  const MostrarClimaContainer({required this.location, super.key});
 
   final WeatherLocation location;
 
   @override
-  State<DetalleContainer> createState() => _DetalleContainerState();
+  State<MostrarClimaContainer> createState() => _MostrarClimaContainerState();
 }
 
-class _DetalleContainerState extends State<DetalleContainer> {
+class _MostrarClimaContainerState extends State<MostrarClimaContainer> {
   WeatherData? weatherData;
 
   bool isLoading = true;
@@ -59,15 +59,6 @@ class _DetalleContainerState extends State<DetalleContainer> {
       );
     }
 
-    final result = weatherData!;
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        HourlyForecastCarousel(forecasts: result.hourlyForecast),
-        const SizedBox(height: 20),
-        Expanded(child: Detalle(data: result.currentCards)),
-      ],
-    );
+    return MostrarClima(weatherData: weatherData!, location: location);
   }
 }

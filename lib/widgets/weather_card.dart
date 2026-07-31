@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../models/weather_card_data.dart';
+import '../models/weather_data.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class WeatherCard extends StatelessWidget {
