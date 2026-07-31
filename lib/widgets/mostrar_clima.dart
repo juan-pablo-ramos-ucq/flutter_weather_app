@@ -26,15 +26,32 @@ class MostrarClima extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Header(),
-              const SizedBox(height: 23),
-              SearchBarWidget(
-                initialText: location.label,
-                replaceCurrentRoute: true,
+              const SizedBox(height: 23), // to separate aesthetically the header (i.e., logo and avatar) from the search bar 
+              Stack(
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      
+                      const SizedBox(height: 64), // Reserves the occupied search bar space.
+                      const SizedBox(height: 38), // to separate aesthetically the search bar from detalle grid
+                      DetalleGrid(data: weatherData.currentCards),
+                      const SizedBox(height: 24), // to separete the detalle grid from forecast carousel
+                      HourlyForecastCarousel(
+                        forecasts: weatherData.hourlyForecast,
+                      ),
+                    ],
+                  ),
+
+                  // Fills the content area so its results can appear over the grid.
+                  Positioned.fill(
+                    child: SearchBarWidget(
+                      initialText: location.label,
+                      replaceCurrentRoute: true,
+                    ),
+                  ),
+                ],
               ),
-              const SizedBox(height: 38),
-              DetalleGrid(data: weatherData.currentCards),
-              const SizedBox(height: 24),
-              HourlyForecastCarousel(forecasts: weatherData.hourlyForecast),
             ],
           ),
         ),
