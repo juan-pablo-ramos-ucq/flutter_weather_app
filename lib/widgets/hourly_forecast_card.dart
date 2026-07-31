@@ -13,41 +13,38 @@ class HourlyForecastCard extends StatelessWidget {
     final appearance = _appearanceFor(forecast.weatherCode, forecast.isDay);
 
     return Container(
-      width: 105,
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+      width: 56,
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
       decoration: BoxDecoration(
         color: const Color(0xFF29466D),
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(12),
         border: Border.all(color: const Color(0xFF3A5A83)),
       ),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
             _formatHour(forecast.time),
             style: GoogleFonts.nunito(
               color: const Color(0xFFB9C7DB),
-              fontSize: 16,
+              fontSize: 10,
               fontWeight: FontWeight.w800,
+              height: 1,
             ),
           ),
-          Icon(appearance.icon, color: appearance.color, size: 35),
-          Text(
-            appearance.label,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: GoogleFonts.nunito(
-              color: const Color(0xFF9BAAC0),
-              fontSize: 11,
-              fontWeight: FontWeight.w700,
-            ),
+          const SizedBox(height: 6),
+          Semantics(
+            label: appearance.label,
+            child: Icon(appearance.icon, color: appearance.color, size: 16),
           ),
+          const SizedBox(height: 6),
           Text(
             '${forecast.temperature.round()}°',
             style: GoogleFonts.nunito(
               color: Colors.white,
-              fontSize: 25,
+              fontSize: 14,
               fontWeight: FontWeight.w900,
+              height: 1,
             ),
           ),
         ],

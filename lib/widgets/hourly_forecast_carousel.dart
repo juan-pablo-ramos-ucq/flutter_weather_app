@@ -15,22 +15,22 @@ class HourlyForecastCarousel extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'PRONÓSTICO POR HORA',
+          "TODAY'S HOURLY FORECAST",
           style: GoogleFonts.nunito(
             color: const Color(0xFF64748B),
-            fontSize: 13,
+            fontSize: 11,
             fontWeight: FontWeight.w900,
             letterSpacing: 1.2,
           ),
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: 16),
         SizedBox(
-          height: 170,
+          height: 80,
           child: ListView.separated(
             scrollDirection: Axis.horizontal,
             itemCount: forecasts.length,
             separatorBuilder: (_, _) {
-              return const SizedBox(width: 12);
+              return const SizedBox(width: 8);
             },
             itemBuilder: (context, index) {
               return HourlyForecastCard(forecast: forecasts[index]);
