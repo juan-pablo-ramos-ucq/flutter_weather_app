@@ -83,7 +83,7 @@ Future<WeatherData> fetchWeatherData(WeatherLocation location) async {
       time: DateTime.parse(times[index]),
       temperature: temperatures[index],
       weatherCode: weatherCodes[index],
-      isDay: dayValues[index],
+      isDay: dayValues[index] == 1,
     );
   });
 
