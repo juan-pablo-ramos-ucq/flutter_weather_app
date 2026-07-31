@@ -34,6 +34,7 @@ class WeatherData {
   final List<HourlyForecastData> hourlyForecast;
 }
 
+// fectch function that creates, populates, and return a WeatherData object
 Future<WeatherData> fetchWeatherData(WeatherLocation location) async {
   final uri = Uri.parse(
     'https://api.open-meteo.com/v1/forecast?latitude=${location.latitude}&longitude=${location.longitude}&hourly=temperature_2m,weather_code,is_day&current=temperature_2m,apparent_temperature,is_day,rain,weather_code,cloud_cover,pressure_msl,wind_speed_10m,wind_direction_10m,wind_gusts_10m,precipitation,relative_humidity_2m,uv_index&timezone=auto&forecast_days=1',
@@ -152,6 +153,8 @@ Future<WeatherData> fetchWeatherData(WeatherLocation location) async {
       cardBorderColor: const Color(0xFF3A5A83),
     ),
   ];
+
+
   return WeatherData(
     currentCards: currentCards,
     hourlyForecast: hourlyForecast,
