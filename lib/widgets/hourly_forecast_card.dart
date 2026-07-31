@@ -12,8 +12,8 @@ class HourlyForecastCard extends StatelessWidget {
     final iconStyle = _generateIconStyle(forecast.weatherCode, forecast.isDay);
 
     return Container(
-      width: 56,
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+      width: 58,
+      padding: const EdgeInsets.symmetric(horizontal: 8),
       decoration: BoxDecoration(
         color: const Color(0xFF29466D),
         borderRadius: BorderRadius.circular(12),
@@ -24,23 +24,23 @@ class HourlyForecastCard extends StatelessWidget {
         children: [
           Text(
             _formatHour(forecast.time),
+            maxLines: 1,
+            softWrap: false,
             style: GoogleFonts.nunito(
               color: const Color(0xFFB9C7DB),
               fontSize: 10,
-              fontWeight: FontWeight.w800,
-              height: 1,
+              fontWeight: FontWeight.w700,
             ),
           ),
-          const SizedBox(height: 6),
+          const SizedBox(height: 4),
           Icon(iconStyle.icon, color: iconStyle.color, size: 16),
-          const SizedBox(height: 6),
+          const SizedBox(height: 3),
           Text(
             '${forecast.temperature.round()}°',
             style: GoogleFonts.nunito(
               color: Colors.white,
               fontSize: 14,
-              fontWeight: FontWeight.w900,
-              height: 1,
+              fontWeight: FontWeight.w800,
             ),
           ),
         ],
@@ -58,10 +58,7 @@ String _formatHour(DateTime time) {
 }
 
 class _ForecastIcon {
-  const _ForecastIcon({
-    required this.icon,
-    required this.color,
-  });
+  const _ForecastIcon({required this.icon, required this.color});
 
   final IconData icon;
   final Color color;
@@ -83,10 +80,7 @@ _ForecastIcon _generateIconStyle(int code, bool isDay) {
   }
 
   if (code == 45 || code == 48) {
-    return const _ForecastIcon(
-      icon: Icons.blur_on,
-      color: Color(0xFFC2CBD8),
-    );
+    return const _ForecastIcon(icon: Icons.blur_on, color: Color(0xFFC2CBD8));
   }
 
   if ((code >= 51 && code <= 67) || (code >= 80 && code <= 82)) {
