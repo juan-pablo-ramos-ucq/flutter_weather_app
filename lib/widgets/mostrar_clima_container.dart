@@ -59,6 +59,6 @@ class _MostrarClimaContainerState extends State<MostrarClimaContainer> {
       );
     }
 
-    return MostrarClima(weatherData: weatherData!, location: location);
+    return MostrarClima(weatherData: weatherData!, location: widget.location);
   }
 }

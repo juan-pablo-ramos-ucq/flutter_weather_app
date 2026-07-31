@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import '../models/weather_location.dart';
-import 'hourly_forecast_data.dart';
 
+//detalle data class
 class WeatherCardData {
   const WeatherCardData({
     required this.title,
@@ -24,6 +24,22 @@ class WeatherCardData {
   final Color cardBackground;
   final Color cardBorderColor;
   final Color? captionColor;
+}
+
+
+//forecast class
+class HourlyForecastData {
+  const HourlyForecastData({
+    required this.time,
+    required this.temperature,
+    required this.weatherCode,
+    required this.isDay,
+  });
+
+  final DateTime time;
+  final double temperature;
+  final int weatherCode;
+  final bool isDay;
 }
 
 // a class that combines detalle data with forecast details

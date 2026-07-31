@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
-import '../models/hourly_forecast_data.dart';
+import '../models/weather_data.dart';
 
 class HourlyForecastCard extends StatelessWidget {
   const HourlyForecastCard({required this.forecast, super.key});
@@ -10,7 +9,7 @@ class HourlyForecastCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final appearance = _appearanceFor(forecast.weatherCode, forecast.isDay);
+    final iconStyle = _generateIconStyle(forecast.weatherCode, forecast.isDay);
 
     return Container(
       width: 56,
@@ -33,10 +32,7 @@ class HourlyForecastCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 6),
-          Semantics(
-            label: appearance.label,
-            child: Icon(appearance.icon, color: appearance.color, size: 16),
-          ),
+          Icon(iconStyle.icon, color: iconStyle.color, size: 16),
           const SizedBox(height: 6),
           Text(
             '${forecast.temperature.round()}°',
@@ -61,70 +57,61 @@ String _formatHour(DateTime time) {
   return '$formattedHour$period';
 }
 
-class _WeatherAppearance {
-  const _WeatherAppearance({
+class _ForecastIcon {
+  const _ForecastIcon({
     required this.icon,
-    required this.label,
     required this.color,
   });
 
   final IconData icon;
-  final String label;
   final Color color;
 }
 
-_WeatherAppearance _appearanceFor(int code, bool isDay) {
+_ForecastIcon _generateIconStyle(int code, bool isDay) {
   if (code == 0) {
-    return _WeatherAppearance(
+    return _ForecastIcon(
       icon: isDay ? Icons.wb_sunny_rounded : Icons.nightlight_round,
-      label: isDay ? 'Soleado' : 'Noche clara',
       color: isDay ? const Color(0xFFFFC83D) : const Color(0xFFFFE28A),
     );
   }
 
   if (code >= 1 && code <= 3) {
-    return const _WeatherAppearance(
+    return const _ForecastIcon(
       icon: Icons.cloud_rounded,
-      label: 'Nublado',
       color: Color(0xFFDDE6F2),
     );
   }
 
   if (code == 45 || code == 48) {
-    return const _WeatherAppearance(
+    return const _ForecastIcon(
       icon: Icons.blur_on,
-      label: 'Niebla',
       color: Color(0xFFC2CBD8),
     );
   }
 
   if ((code >= 51 && code <= 67) || (code >= 80 && code <= 82)) {
-    return const _WeatherAppearance(
+    return const _ForecastIcon(
       icon: Icons.water_drop_rounded,
-      label: 'Lluvia',
       color: Color(0xFF63AFFF),
     );
   }
 
   if ((code >= 71 && code <= 77) || code == 85 || code == 86) {
-    return const _WeatherAppearance(
+    return const _ForecastIcon(
       icon: Icons.ac_unit_rounded,
-      label: 'Nieve',
       color: Color(0xFFEAF6FF),
     );
   }
 
   if (code >= 95) {
-    return const _WeatherAppearance(
+    return const _ForecastIcon(
       icon: Icons.thunderstorm_rounded,
-      label: 'Tormenta',
       color: Color(0xFFC7A4FF),
     );
   }
 
-  return const _WeatherAppearance(
+  return const _ForecastIcon(
     icon: Icons.cloud_outlined,
-    label: 'Variable',
     color: Color(0xFFDDE6F2),
   );
 }

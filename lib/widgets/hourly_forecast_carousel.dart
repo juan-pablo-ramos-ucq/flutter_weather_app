@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
-import '../models/hourly_forecast_data.dart';
+import '../models/weather_data.dart';
 import 'hourly_forecast_card.dart';
 
 class HourlyForecastCarousel extends StatelessWidget {

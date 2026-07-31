@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'widgets/google_login.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'widgets/home.dart';
-import 'widgets/mostrar_clima.dart';
+import 'widgets/mostrar_clima_container.dart';
 import '../models/weather_location.dart';
 
 Future<void> main() async {
@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
           return MaterialPageRoute(
             settings: settings,
             builder: (context) {
-              return MostrarClima(location: location);
+              return MostrarClimaContainer(location: location);
             },
           );
         }
