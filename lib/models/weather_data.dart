@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import '../models/weather_location.dart';
 
-class WeatherCardData {
-  const WeatherCardData({
+//detalle data class
+class DetalleCardData {
+  const DetalleCardData({
     required this.title,
     required this.metric,
     required this.caption,
@@ -25,9 +26,34 @@ class WeatherCardData {
   final Color? captionColor;
 }
 
-Future<List<WeatherCardData>> fetchWeatherData(WeatherLocation location) async {
+
+//forecast class
+class HourlyForecastData {
+  const HourlyForecastData({
+    required this.time,
+    required this.temperature,
+    required this.weatherCode,
+    required this.isDay,
+  });
+
+  final DateTime time;
+  final double temperature;
+  final int weatherCode;
+  final bool isDay;
+}
+
+// a class that combines detalle data with forecast details
+class WeatherData {
+  const WeatherData({required this.currentCards, required this.hourlyForecast});
+
+  final List<DetalleCardData> currentCards;
+  final List<HourlyForecastData> hourlyForecast;
+}
+
+// fectch function that creates, populates, and return a WeatherData object
+Future<WeatherData> fetchWeatherData(WeatherLocation location) async {
   final uri = Uri.parse(
-    'https://api.open-meteo.com/v1/forecast?latitude=${location.latitude}&longitude=${location.longitude}&hourly=temperature_2m,weather_code&current=temperature_2m,apparent_temperature,is_day,rain,weather_code,cloud_cover,pressure_msl,wind_speed_10m,wind_direction_10m,wind_gusts_10m,precipitation,relative_humidity_2m,uv_index&timezone=auto&forecast_days=1',
+    'https://api.open-meteo.com/v1/forecast?latitude=${location.latitude}&longitude=${location.longitude}&hourly=temperature_2m,weather_code,is_day&current=temperature_2m,apparent_temperature,is_day,rain,weather_code,cloud_cover,pressure_msl,wind_speed_10m,wind_direction_10m,wind_gusts_10m,precipitation,relative_humidity_2m,uv_index&timezone=auto&forecast_days=1',
   );
 
   final response = await http.get(uri);
@@ -37,11 +63,33 @@ Future<List<WeatherCardData>> fetchWeatherData(WeatherLocation location) async {
   }
 
   final responseData = jsonDecode(response.body);
+  
+  // current day data with units
   final current = responseData['current'];
   final currentUnits = responseData['current_units'];
 
-  return [
-    WeatherCardData(
+  // Hourly forecast data for the current day
+  final hourly = responseData['hourly'];
+  final times = hourly['time']; // Array containing the date and time for each hour
+  final temperatures = hourly['temperature_2m']; // Array containing the temperature for each hour
+  final weatherCodes = hourly['weather_code']; // Array containing the weather code for each hour
+  final dayValues = hourly['is_day']; // Array indicating whether each hour occurs during the day or at night
+
+  // creating list of forecast data objects
+  final hourlyForecast = List<HourlyForecastData>.generate(times.length, (
+    index,
+  ) {
+    return HourlyForecastData(
+      time: DateTime.parse(times[index]),
+      temperature: temperatures[index],
+      weatherCode: weatherCodes[index],
+      isDay: dayValues[index] == 1,
+    );
+  });
+
+  // creating list of current/detalle data objects
+  final currentCards = <DetalleCardData>[
+    DetalleCardData(
       title: 'Humidity',
       metric:
           '${current['relative_humidity_2m']}'
@@ -52,7 +100,7 @@ Future<List<WeatherCardData>> fetchWeatherData(WeatherLocation location) async {
       cardBackground: const Color(0xFF29466D),
       cardBorderColor: const Color(0xFF3A5A83),
     ),
-    WeatherCardData(
+    DetalleCardData(
       title: 'UV index',
       metric: _formatNumber(current['uv_index']),
       caption: _getUvDescription((current['uv_index'] as num).toDouble()),
@@ -62,7 +110,7 @@ Future<List<WeatherCardData>> fetchWeatherData(WeatherLocation location) async {
       cardBorderColor: const Color(0xFF3A5A83),
       captionColor: _getUvColor((current['uv_index'] as num).toDouble()),
     ),
-    WeatherCardData(
+    DetalleCardData(
       title: 'Cloud cover',
       metric: '${current['cloud_cover']}${currentUnits['cloud_cover']}',
       caption: 'Sky coverage',
@@ -71,7 +119,7 @@ Future<List<WeatherCardData>> fetchWeatherData(WeatherLocation location) async {
       cardBackground: const Color(0xFF29466D),
       cardBorderColor: const Color(0xFF3A5A83),
     ),
-    WeatherCardData(
+    DetalleCardData(
       title: 'Pressure',
       metric: _formatNumber(current['pressure_msl']),
       caption: currentUnits['pressure_msl'].toString(),
@@ -80,7 +128,7 @@ Future<List<WeatherCardData>> fetchWeatherData(WeatherLocation location) async {
       cardBackground: const Color(0xFF29466D),
       cardBorderColor: const Color(0xFF3A5A83),
     ),
-    WeatherCardData(
+    DetalleCardData(
       title: 'Wind speed',
       metric: _formatNumber(current['wind_speed_10m']),
       caption: currentUnits['wind_speed_10m'].toString(),
@@ -89,7 +137,7 @@ Future<List<WeatherCardData>> fetchWeatherData(WeatherLocation location) async {
       cardBackground: const Color(0xFF29466D),
       cardBorderColor: const Color(0xFF3A5A83),
     ),
-    WeatherCardData(
+    DetalleCardData(
       title: 'Wind direction',
       metric: _windDirectionToCompass(
         (current['wind_direction_10m'] as num).toDouble(),
@@ -102,7 +150,7 @@ Future<List<WeatherCardData>> fetchWeatherData(WeatherLocation location) async {
       cardBackground: const Color(0xFF29466D),
       cardBorderColor: const Color(0xFF3A5A83),
     ),
-    WeatherCardData(
+    DetalleCardData(
       title: 'Wind gusts',
       metric: _formatNumber(current['wind_gusts_10m']),
       caption: '${currentUnits['wind_gusts_10m']} peak',
@@ -111,7 +159,7 @@ Future<List<WeatherCardData>> fetchWeatherData(WeatherLocation location) async {
       cardBackground: const Color(0xFF29466D),
       cardBorderColor: const Color(0xFF3A5A83),
     ),
-    WeatherCardData(
+    DetalleCardData(
       title: 'Precipitation',
       metric: _formatNumber(current['precipitation']),
       caption: '${currentUnits['precipitation']} / hr',
@@ -121,8 +169,15 @@ Future<List<WeatherCardData>> fetchWeatherData(WeatherLocation location) async {
       cardBorderColor: const Color(0xFF3A5A83),
     ),
   ];
+
+
+  return WeatherData(
+    currentCards: currentCards,
+    hourlyForecast: hourlyForecast,
+  );
 }
 
+// helper functions for current/detalle data objects
 String _formatNumber(dynamic value) {
   if (value is! num) {
     //to evade numeric conversion errors

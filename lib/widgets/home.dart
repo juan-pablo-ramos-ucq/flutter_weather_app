@@ -12,7 +12,7 @@ class Home extends StatelessWidget {
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(
-            horizontal: 20,
+            horizontal: 16,
             vertical: 25,
           ),
           child: Column(
