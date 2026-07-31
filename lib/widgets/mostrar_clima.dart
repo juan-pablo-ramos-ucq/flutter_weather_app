@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'detalle.dart';
+import 'detalle_grid.dart';
 import 'header.dart';
 import '../models/weather_data.dart';
 import 'search_bar.dart';
@@ -33,7 +33,7 @@ class MostrarClima extends StatelessWidget {
                     Positioned.fill(
                       top: 79,
                       bottom: 109,
-                      child: Detalle(data: weatherData.currentCards),
+                      child: DetalleGrid(data: weatherData.currentCards),
                     ),
                     Positioned.fill(
                       child: SearchBarWidget(

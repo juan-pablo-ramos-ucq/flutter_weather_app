@@ -4,8 +4,8 @@ import 'package:http/http.dart' as http;
 import '../models/weather_location.dart';
 
 //detalle data class
-class WeatherCardData {
-  const WeatherCardData({
+class DetalleCardData {
+  const DetalleCardData({
     required this.title,
     required this.metric,
     required this.caption,
@@ -46,7 +46,7 @@ class HourlyForecastData {
 class WeatherData {
   const WeatherData({required this.currentCards, required this.hourlyForecast});
 
-  final List<WeatherCardData> currentCards;
+  final List<DetalleCardData> currentCards;
   final List<HourlyForecastData> hourlyForecast;
 }
 
@@ -88,8 +88,8 @@ Future<WeatherData> fetchWeatherData(WeatherLocation location) async {
   });
 
   // creating list of current/detalle data objects
-  final currentCards = <WeatherCardData>[
-    WeatherCardData(
+  final currentCards = <DetalleCardData>[
+    DetalleCardData(
       title: 'Humidity',
       metric:
           '${current['relative_humidity_2m']}'
@@ -100,7 +100,7 @@ Future<WeatherData> fetchWeatherData(WeatherLocation location) async {
       cardBackground: const Color(0xFF29466D),
       cardBorderColor: const Color(0xFF3A5A83),
     ),
-    WeatherCardData(
+    DetalleCardData(
       title: 'UV index',
       metric: _formatNumber(current['uv_index']),
       caption: _getUvDescription((current['uv_index'] as num).toDouble()),
@@ -110,7 +110,7 @@ Future<WeatherData> fetchWeatherData(WeatherLocation location) async {
       cardBorderColor: const Color(0xFF3A5A83),
       captionColor: _getUvColor((current['uv_index'] as num).toDouble()),
     ),
-    WeatherCardData(
+    DetalleCardData(
       title: 'Cloud cover',
       metric: '${current['cloud_cover']}${currentUnits['cloud_cover']}',
       caption: 'Sky coverage',
@@ -119,7 +119,7 @@ Future<WeatherData> fetchWeatherData(WeatherLocation location) async {
       cardBackground: const Color(0xFF29466D),
       cardBorderColor: const Color(0xFF3A5A83),
     ),
-    WeatherCardData(
+    DetalleCardData(
       title: 'Pressure',
       metric: _formatNumber(current['pressure_msl']),
       caption: currentUnits['pressure_msl'].toString(),
@@ -128,7 +128,7 @@ Future<WeatherData> fetchWeatherData(WeatherLocation location) async {
       cardBackground: const Color(0xFF29466D),
       cardBorderColor: const Color(0xFF3A5A83),
     ),
-    WeatherCardData(
+    DetalleCardData(
       title: 'Wind speed',
       metric: _formatNumber(current['wind_speed_10m']),
       caption: currentUnits['wind_speed_10m'].toString(),
@@ -137,7 +137,7 @@ Future<WeatherData> fetchWeatherData(WeatherLocation location) async {
       cardBackground: const Color(0xFF29466D),
       cardBorderColor: const Color(0xFF3A5A83),
     ),
-    WeatherCardData(
+    DetalleCardData(
       title: 'Wind direction',
       metric: _windDirectionToCompass(
         (current['wind_direction_10m'] as num).toDouble(),
@@ -150,7 +150,7 @@ Future<WeatherData> fetchWeatherData(WeatherLocation location) async {
       cardBackground: const Color(0xFF29466D),
       cardBorderColor: const Color(0xFF3A5A83),
     ),
-    WeatherCardData(
+    DetalleCardData(
       title: 'Wind gusts',
       metric: _formatNumber(current['wind_gusts_10m']),
       caption: '${currentUnits['wind_gusts_10m']} peak',
@@ -159,7 +159,7 @@ Future<WeatherData> fetchWeatherData(WeatherLocation location) async {
       cardBackground: const Color(0xFF29466D),
       cardBorderColor: const Color(0xFF3A5A83),
     ),
-    WeatherCardData(
+    DetalleCardData(
       title: 'Precipitation',
       metric: _formatNumber(current['precipitation']),
       caption: '${currentUnits['precipitation']} / hr',
