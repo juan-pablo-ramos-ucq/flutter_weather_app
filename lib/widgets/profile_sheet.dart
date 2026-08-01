@@ -1,11 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'profile_info_tile.dart';
+import 'dart:io';
 
 class ProfileSheet extends StatelessWidget {
-  const ProfileSheet({super.key, required this.userData});
+  const ProfileSheet({
+    super.key,
+    required this.userData,
+    this.localImagePath,
+    this.takingPhoto = false,
+    required this.onTakePhoto,
+  });
 
   final Future<List<String?>> userData;
+  final String? localImagePath;
+  final VoidCallback onTakePhoto;
+  final bool takingPhoto;
 
   @override
   Widget build(BuildContext context) {
@@ -34,10 +44,7 @@ class ProfileSheet extends StatelessWidget {
                 style: IconButton.styleFrom(
                   backgroundColor: const Color(0xFFF1F5F9),
                 ),
-                icon: const Icon(
-                  Icons.close,
-                  color: Color(0xFF94A3B8),
-                ),
+                icon: const Icon(Icons.close, color: Color(0xFF94A3B8)),
               ),
             ),
 
@@ -46,9 +53,7 @@ class ProfileSheet extends StatelessWidget {
                 future: userData,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
+                    return const Center(child: CircularProgressIndicator());
                   }
 
                   if (snapshot.hasError) {
@@ -64,26 +69,57 @@ class ProfileSheet extends StatelessWidget {
                   return SingleChildScrollView(
                     child: Column(
                       children: [
-                        Container(
-                          width: 108,
-                          height: 108,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: Border.all(
-                              color: const Color(0xFFE2E8F0),
-                              width: 3,
+                        Stack(
+                          clipBehavior: Clip.none,
+                          children: [
+                            Container(
+                              width: 108,
+                              height: 108,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  color: const Color(0xFFE2E8F0),
+                                  width: 3,
+                                ),
+                              ),
+                              child: ClipOval(
+                                child: localImagePath != null
+                                    ? Image.file(
+                                        File(localImagePath!),
+                                        fit: BoxFit.cover,
+                                      )
+                                    : imageUrl.isNotEmpty
+                                    ? Image.network(
+                                        imageUrl,
+                                        fit: BoxFit.cover,
+                                        errorBuilder: (_, _, _) =>
+                                            const Icon(Icons.person, size: 50),
+                                      )
+                                    : const Icon(Icons.person, size: 50),
+                              ),
                             ),
-                          ),
-                          child: ClipOval(
-                            child: imageUrl.isNotEmpty
-                                ? Image.network(
-                                    imageUrl,
-                                    fit: BoxFit.cover,
-                                    errorBuilder: (_, _, _) =>
-                                        const Icon(Icons.person, size: 50),
-                                  )
-                                : const Icon(Icons.person, size: 50),
-                          ),
+                            Positioned(
+                              right: -4,
+                              bottom: -4,
+                              child: IconButton(
+                                onPressed: takingPhoto ? null : onTakePhoto,
+                                style: IconButton.styleFrom(
+                                  backgroundColor: const Color(0xFF4F8DF7),
+                                  foregroundColor: Colors.white,
+                                ),
+                                icon: takingPhoto
+                                    ? const SizedBox(
+                                        width: 18,
+                                        height: 18,
+                                        child: CircularProgressIndicator(
+                                          strokeWidth: 2,
+                                          color: Colors.white,
+                                        ),
+                                      )
+                                    : const Icon(Icons.camera_alt_outlined),
+                              ),
+                            ),
+                          ],
                         ),
 
                         const SizedBox(height: 20),
