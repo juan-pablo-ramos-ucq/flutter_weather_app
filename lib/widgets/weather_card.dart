@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
-import '../models/weather_card_data.dart';
+import '../models/weather_data.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class WeatherCard extends StatelessWidget {
-  const WeatherCard({
-    required this.currentCard,
-    super.key,
-  });
+  const WeatherCard({required this.currentCard, super.key});
 
-  final WeatherCardData currentCard;
+  final DetalleCardData currentCard;
 
   @override
   Widget build(BuildContext context) {

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import '../models/weather_card_data.dart';
+import '../models/weather_data.dart';
 import 'weather_card.dart';
 
 class Detalle extends StatelessWidget {
   const Detalle({required this.data, super.key});
 
-  final List<WeatherCardData> data;
+  final List<DetalleCardData> data;
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +18,7 @@ class Detalle extends StatelessWidget {
         mainAxisExtent: 144,
       ),
       itemBuilder: (BuildContext context, int index) {
-        final WeatherCardData currentCard = data[index];
+        final DetalleCardData currentCard = data[index];
 
         return WeatherCard(currentCard: currentCard);
       },
