@@ -40,6 +40,12 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
 
     try {
       final response = await http.get(url);
+      
+      //to avoid stale search results in home when the mostrar-clima clear icon is pressed
+      if (_controller.text.trim() != query.trim()) {
+        return;
+      }
+
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
         setState(() {
@@ -113,8 +119,8 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
                         _searchCities('');
 
                         if (widget.replaceCurrentRoute) {
-                          Navigator.pop(context);
                           FocusScope.of(context).unfocus();
+                          Navigator.pop(context);
                         }
                       },
                     )
@@ -165,7 +171,7 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
                         latitude: (city['latitude'] as num).toDouble(),
                         longitude: (city['longitude'] as num).toDouble(),
                       );
-
+                      
                       setState(() {
                         _controller.clear();
                         _searchResults = [];
