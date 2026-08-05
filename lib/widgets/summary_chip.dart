@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class SummaryChip extends StatelessWidget {
-  const SummaryChip({required this.icon, required this.label});
+  const SummaryChip({required this.icon, required this.label, super.key});
 
   final IconData icon;
   final String label;
