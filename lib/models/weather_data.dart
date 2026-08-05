@@ -42,10 +42,36 @@ class HourlyForecastData {
   final bool isDay;
 }
 
+//summary class
+class SummaryData {
+  const SummaryData({
+    required this.title,
+    required this.temperature,
+    required this.feelsLike,
+    required this.timeLabel,
+    required this.rainLabel,
+    required this.icon,
+    required this.accentColor,
+    required this.gradientStart,
+    required this.gradientEnd,
+  });
+
+  final String title;
+  final String temperature;
+  final String feelsLike;
+  final String timeLabel;
+  final String rainLabel;
+  final IconData icon;
+  final Color accentColor;
+  final Color gradientStart;
+  final Color gradientEnd;
+}
+
 // a class that combines detalle data with forecast details
 class WeatherData {
-  const WeatherData({required this.currentCards, required this.hourlyForecast});
+  const WeatherData({required this.currentSummary, required this.currentCards, required this.hourlyForecast});
 
+  final SummaryData currentSummary;
   final List<DetalleCardData> currentCards;
   final List<HourlyForecastData> hourlyForecast;
 }
@@ -172,6 +198,7 @@ Future<WeatherData> fetchWeatherData(WeatherLocation location) async {
 
 
   return WeatherData(
+    currentSummary: _buildSummary(current),
     currentCards: currentCards,
     hourlyForecast: hourlyForecast,
   );
@@ -233,3 +260,100 @@ Color _getUvColor(double uvIndex) {
   if (uvIndex < 11) return const Color(0xFFFF5C8A);
   return const Color(0xFFB46DFF);
 }
+
+
+SummaryData _buildSummary(Map<String, dynamic> current) {
+  final temperature = _formatNumber(current['temperature_2m']);
+  final feelsLike = _formatNumber(current['apparent_temperature']);
+  final precipitation = (current['precipitation'] as num?)?.toDouble() ?? 0;
+  final rain = (current['rain'] as num?)?.toDouble() ?? 0;
+  final cloudCover = (current['cloud_cover'] as num?)?.toDouble() ?? 0;
+  final isDay = (current['is_day'] as num?)?.toInt() == 1;
+  final weatherCode = (current['weather_code'] as num?)?.toInt() ?? 0;
+
+  if (_isRainCode(weatherCode) || precipitation >= 1.0 || rain >= 1.0) {
+    return SummaryData(
+      title: precipitation < 1.0 && rain < 1.0 ? 'Light Rain' : 'Rainy',
+      temperature: temperature,
+      feelsLike: feelsLike,
+      timeLabel: isDay ? 'Daytime' : 'Nighttime',
+      rainLabel: _buildRainLabel(precipitation, rain),
+      icon: Icons.water_drop_rounded,
+      accentColor: const Color(0xFF8AB7FF),
+      gradientStart: const Color(0xFF17335A),
+      gradientEnd: const Color(0xFF3D5B9C),
+    );
+  }
+
+  if (_isDrizzleCode(weatherCode) || precipitation > 0 || rain > 0) {
+    return SummaryData(
+      title: 'Drizzle',
+      temperature: temperature,
+      feelsLike: feelsLike,
+      timeLabel: isDay ? 'Daytime' : 'Nighttime',
+      rainLabel: _buildRainLabel(precipitation, rain),
+      icon: Icons.grain_rounded,
+      accentColor: const Color(0xFF86A9FF),
+      gradientStart: const Color(0xFF1A315A),
+      gradientEnd: const Color(0xFF36558F),
+    );
+  }
+
+  if (_isCloudyCode(weatherCode) || cloudCover >= 80) {
+    return SummaryData(
+      title: 'Cloudy',
+      temperature: temperature,
+      feelsLike: feelsLike,
+      timeLabel: isDay ? 'Daytime' : 'Nighttime',
+      rainLabel: _buildRainLabel(precipitation, rain),
+      icon: Icons.cloud_rounded,
+      accentColor: const Color(0xFFD7E3FF),
+      gradientStart: const Color(0xFF17213C),
+      gradientEnd: const Color(0xFF34486E),
+    );
+  }
+
+  if (_isPartlyCloudyCode(weatherCode) || cloudCover >= 30) {
+    return SummaryData(
+      title: 'Partly Cloudy',
+      temperature: temperature,
+      feelsLike: feelsLike,
+      timeLabel: isDay ? 'Daytime' : 'Nighttime',
+      rainLabel: _buildRainLabel(precipitation, rain),
+      icon: isDay ? Icons.wb_cloudy_rounded : Icons.nightlight_round,
+      accentColor: const Color(0xFFF0E4FF),
+      gradientStart: const Color(0xFF162247),
+      gradientEnd: const Color(0xFF314F7C),
+    );
+  }
+
+  return SummaryData(
+    title: isDay ? 'Clear Day' : 'Clear Night',
+    temperature: temperature,
+    feelsLike: feelsLike,
+    timeLabel: isDay ? 'Daytime' : 'Nighttime',
+    rainLabel: _buildRainLabel(precipitation, rain),
+    icon: isDay ? Icons.wb_sunny_rounded : Icons.nightlight_round,
+    accentColor: isDay ? const Color(0xFFFFD56A) : const Color(0xFFD9D4FF),
+    gradientStart: const Color(0xFF132246),
+    gradientEnd: const Color(0xFF2C3E67),
+  );
+}
+
+String _buildRainLabel(double precipitation, double rain) {
+  final amount = precipitation > 0 ? precipitation : rain;
+
+  if (amount <= 0) {
+    return 'No Rain';
+  }
+
+  return 'Raining ${amount.toStringAsFixed(amount < 1 ? 1 : 0)}mm';
+}
+
+bool _isRainCode(int code) => (code >= 71 && code <= 82) || code >= 95;
+
+bool _isDrizzleCode(int code) => code >= 51 && code <= 57;
+
+bool _isCloudyCode(int code) => code == 3;
+
+bool _isPartlyCloudyCode(int code) => code == 1 || code == 2;

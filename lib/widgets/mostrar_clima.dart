@@ -5,6 +5,7 @@ import '../models/weather_data.dart';
 import 'search_bar.dart';
 import 'hourly_forecast_carousel.dart';
 import '../models/weather_location.dart';
+import './summary.dart';
 
 class MostrarClima extends StatelessWidget {
   const MostrarClima({
@@ -34,7 +35,9 @@ class MostrarClima extends StatelessWidget {
                     children: [
                       
                       const SizedBox(height: 64), // Reserves the occupied search bar space.
-                      const SizedBox(height: 38), // to separate aesthetically the search bar from detalle grid
+                      const SizedBox(height: 38), // to separate aesthetically the search bar from summary
+                      Summary(summary: weatherData.currentSummary),
+                      const SizedBox(height: 38), // to separate aesthetically the summary from detalle grid
                       DetalleGrid(data: weatherData.currentCards),
                       const SizedBox(height: 24), // to separete the detalle grid from forecast carousel
                       HourlyForecastCarousel(
