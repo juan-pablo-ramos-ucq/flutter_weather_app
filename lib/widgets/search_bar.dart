@@ -1,82 +1,32 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:google_fonts/google_fonts.dart';
 import '../models/weather_location.dart';
 
-class SearchBarWidget extends StatefulWidget {
-  const SearchBarWidget({
-    this.initialText = '',
+class SearchBarView extends StatelessWidget {
+  const SearchBarView({
+    required this.controller,
+    required this.searchCities,
+    required this.isLoading,
+    required this.searchResults,
     this.replaceCurrentRoute = false,
     super.key,
   });
 
-  final String initialText;
+  final TextEditingController controller;
+  final ValueChanged<String> searchCities;
+  final bool isLoading;
+  final List<dynamic> searchResults;
   final bool replaceCurrentRoute;
-
-  @override
-  State<SearchBarWidget> createState() => _SearchBarWidgetState();
-}
-
-class _SearchBarWidgetState extends State<SearchBarWidget> {
-  late final TextEditingController _controller;
-  List<dynamic> _searchResults = [];
-  bool _isLoading = false;
-
-  Future<void> _searchCities(String query) async {
-    if (query.trim().isEmpty) {
-      setState(() {
-        _searchResults = [];
-        _isLoading = false;
-      });
-      return;
-    }
-
-    setState(() => _isLoading = true);
-
-    final url = Uri.parse(
-      'https://geocoding-api.open-meteo.com/v1/search?name=${Uri.encodeComponent(query)}&count=6&language=en&format=json',
-    );
-
-    try {
-      final response = await http.get(url);
-      
-      //to avoid stale search results in home when the mostrar-clima clear icon is pressed
-      if (_controller.text.trim() != query.trim()) {
-        return;
-      }
-
-      if (response.statusCode == 200) {
-        final data = json.decode(response.body);
-        setState(() {
-          _searchResults = data['results'] ?? [];
-        });
-      }
-    } catch (e) {
-      debugPrint("Error buscando ciudad: $e");
-    } finally {
-      setState(() => _isLoading = false);
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = TextEditingController(text: widget.initialText);
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+          padding: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 4,
+          ),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(20),
@@ -90,15 +40,15 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
             ],
           ),
           child: TextField(
-            controller: _controller,
+            controller: controller,
             cursorColor: Colors.black,
-            onChanged: _searchCities,
+            onChanged: searchCities,
             decoration: InputDecoration(
-              icon: !_isLoading
+              icon: !isLoading
                   ? const Icon(Icons.search, color: Colors.grey)
                   : Transform.scale(
                       scale: 0.5,
-                      child: CircularProgressIndicator(
+                      child: const CircularProgressIndicator(
                         strokeWidth: 2,
                         color: Color(0xFF94A3B8),
                       ),
@@ -111,14 +61,14 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
                 height: 1.65,
               ),
               border: InputBorder.none,
-              suffixIcon: _controller.text.isNotEmpty
+              suffixIcon: controller.text.isNotEmpty
                   ? IconButton(
                       icon: const Icon(Icons.clear, size: 20),
                       onPressed: () {
-                        _controller.clear();
-                        _searchCities('');
+                        controller.clear();
+                        searchCities('');
 
-                        if (widget.replaceCurrentRoute) {
+                        if (replaceCurrentRoute) {
                           FocusScope.of(context).unfocus();
                           Navigator.pop(context);
                         }
@@ -128,8 +78,7 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
             ),
           ),
         ),
-
-        if (_searchResults.isNotEmpty)
+        if (searchResults.isNotEmpty)
           Positioned(
             top: 64,
             left: 0,
@@ -150,9 +99,9 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
               child: ListView.builder(
                 shrinkWrap: true,
                 padding: EdgeInsets.zero,
-                itemCount: _searchResults.length,
+                itemCount: searchResults.length,
                 itemBuilder: (context, index) {
-                  final city = _searchResults[index];
+                  final city = searchResults[index];
                   final name = city['name'] ?? '';
                   final country = city['country'] ?? '';
                   final admin1 = city['admin1'] ?? '';
@@ -171,13 +120,11 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
                         latitude: (city['latitude'] as num).toDouble(),
                         longitude: (city['longitude'] as num).toDouble(),
                       );
-                      
-                      setState(() {
-                        _controller.clear();
-                        _searchResults = [];
-                      });
 
-                      if (widget.replaceCurrentRoute) {
+                      controller.clear();
+                      searchCities('');
+
+                      if (replaceCurrentRoute) {
                         Navigator.pushReplacementNamed(
                           context,
                           '/weather',

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'header.dart';
 import 'vacio.dart';
-import 'search_bar.dart';
+import 'search_bar_container.dart';
 
 class Home extends StatelessWidget {
   const Home({super.key});
@@ -28,7 +28,7 @@ class Home extends StatelessWidget {
 
                     // top layer
                     const Positioned.fill(
-                      child: SearchBarWidget(),
+                      child: SearchBarContainer(),
                     ),
                   ],
                 ),

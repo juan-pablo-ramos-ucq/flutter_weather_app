@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'detalle_grid.dart';
 import 'header.dart';
 import '../models/weather_data.dart';
-import 'search_bar.dart';
+import 'search_bar_container.dart';
 import 'hourly_forecast_carousel.dart';
 import '../models/weather_location.dart';
 import './summary.dart';
@@ -48,7 +48,7 @@ class MostrarClima extends StatelessWidget {
 
                   // Fills the content area so its results can appear over the grid.
                   Positioned.fill(
-                    child: SearchBarWidget(
+                    child: SearchBarContainer(
                       initialText: location.label,
                       replaceCurrentRoute: true,
                     ),
