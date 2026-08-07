@@ -51,7 +51,7 @@ class _SearchBarContainerState extends State<SearchBarContainer> {
     setState(() => _isLoading = true);
 
     _debounce = Timer(
-      const Duration(milliseconds: 500),
+      const Duration(milliseconds: 500), // Espera 500 ms antes de invocar _searchCities y hacer la consulta a la API; por lo tanto, lo más rápido que puede consultar la API el usuario (entre consultas) es cada medio segundo. Durante esos 500 ms, _debounce?.cancel() puede cancelar el Timer y evitar que se haga el fetch y, por lo tanto, que salgan varios SnackBars.
       () => _searchCities(query, requestId),
     );
   }
