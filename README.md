@@ -8,8 +8,8 @@ El desarrollo se realizó de forma progresiva en tres iteraciones:
 
 | Iteración | Resultado |
 | --- | --- |
-| [1. Inicio de sesión y pantalla principal](https://youtu.be/IXDwoxfYM64) | Se incorporaron la identidad visual de WeatherScope, el acceso con Google, la pantalla principal, el avatar y la consulta de los datos básicos del perfil. |
-| [2. Consulta y visualización del clima](https://youtu.be/GB6bMlAj7-A) | Se habilitó la búsqueda de ciudades mediante la API de geocodificación de Open-Meteo y se creó la pantalla de clima con tarjetas de condiciones actuales y un pronóstico por hora. En esta etapa, el resumen meteorológico aún no estaba terminado. |
+| [1. Inicio de sesión y pantalla principal](https://youtu.be/GB6bMlAj7-A) | Se incorporaron la identidad visual de WeatherScope, el acceso con Google, la pantalla principal, el avatar y la consulta de los datos básicos del perfil. |
+| [2. Consulta y visualización del clima](https://youtu.be/IXDwoxfYM64) | Se habilitó la búsqueda de ciudades mediante la API de geocodificación de Open-Meteo y se creó la pantalla de clima con tarjetas de condiciones actuales y un pronóstico por hora. En esta etapa, el resumen meteorológico aún no estaba terminado. |
 | 3. Persistencia y resiliencia | La aplicación ahora recuerda al usuario y abre directamente la pantalla principal después del primer inicio de sesión. También se añadieron estados de carga, control de solicitudes, `try/catch`, tiempos de espera y mensajes comprensibles ante fallos de las APIs o falta de Internet. Esta versión completa la tarjeta de resumen meteorológico. |
 
 ## Estado actual
