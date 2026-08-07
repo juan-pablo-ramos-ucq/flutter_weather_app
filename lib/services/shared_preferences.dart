@@ -6,6 +6,11 @@ class PreferencesService {
   static const String _imgURLKey = 'img_url_key';
   static const String _emailKey = 'email_key';
 
+  Future<bool> hasUser() async {
+    final prefs = await SharedPreferences.getInstance();
+    return (prefs.getString(_emailKey) ?? '').isNotEmpty;
+  }
+
   // Método para guardar los datos
   Future<void> saveUser(
     String name,
